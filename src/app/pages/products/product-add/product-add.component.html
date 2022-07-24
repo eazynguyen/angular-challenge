@@ -1,0 +1,75 @@
+<div class="dark:bg-gray-800 rounded-xl p-6 h-full flex flex-col space-y-10">
+  <ng-container *ngIf="vm$ | async as vm">
+    <form [formGroup]="formProduct" (ngSubmit)="onSubmit()">
+      <div class="tui-row">
+        <div class="tui-col_6">
+          <tui-input
+            tuiTextfieldSize="m"
+            tuiTextfieldExampleText="Enter product title..."
+            tuiAutoFocus="true"
+            formControlName="title"
+            >Title</tui-input
+          >
+          <tui-field-error
+            formControlName="title"
+            class="absolute"
+          ></tui-field-error>
+        </div>
+        <div class="tui-col_6">
+          <tui-select
+            tuiTextfieldSize="m"
+            formControlName="category"
+          >
+            Category
+            <tui-data-list-wrapper
+              *tuiDataList
+              [items]="vm.categories"
+            ></tui-data-list-wrapper>
+          </tui-select>
+          <tui-field-error
+            formControlName="image"
+            class="absolute"
+          ></tui-field-error>
+        </div>
+      </div>
+      <div class="tui-row mt-10">
+        <div class="tui-col_6">
+          <tui-input-number
+            tuiTextfieldSize="m"
+            tuiTextfieldExampleText="Enter product price..."
+            [prefix]="'USD' | tuiCurrency"
+            formControlName="price"
+          >
+            Price
+          </tui-input-number>
+          <tui-field-error
+            formControlName="price"
+            class="absolute"
+          ></tui-field-error>
+        </div>
+        <div class="tui-col_6">
+          <tui-input-number
+            tuiTextfieldSize="m"
+            tuiTextfieldExampleText="Enter discount percentage..."
+            [prefix]="'%'"
+            formControlName="discountPercentage"
+          >
+            Discount Percentage
+          </tui-input-number>
+          <tui-field-error
+            formControlName="discountPercentage"
+            class="absolute"
+          ></tui-field-error>
+        </div>
+      </div>
+      <div class="mt-10 text-right">
+        <button tuiButton size="m" [showLoader]="vm.isLoading === 'pending'">
+          {{!vm.isUpdate ? 'Create Product' : 'Update Product'}}
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</div>
+<ng-template #loading>
+  <tui-loader class="loader"></tui-loader>
+</ng-template>

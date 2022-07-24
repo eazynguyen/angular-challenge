@@ -1,0 +1,12 @@
+:host ::ng-deep {
+  .content {
+    height: 100vh !important;
+    overflow: auto;
+  }
+
+  tui-alert-host .content,
+  tui-pagination .content,
+  tui-dropdown-box .content{
+    height: auto !important;
+  }
+}

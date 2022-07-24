@@ -1,0 +1,21 @@
+<div class="dark:bg-gray-800 rounded-xl p-6 h-full flex flex-col space-y-10">
+  <ng-container *ngIf="vm$ | async as vm">
+    <ng-container *ngIf="!(vm.isLoading === 'pending'); else showLoading">
+      <div class="text-center mt-10">
+        <ng-container *ngIf="vm.product; else errorData">
+        <span class="tui-text_h5 text-gray-300"
+        >Product
+          <span class="tui-text_h3 text-gray-500">{{ vm.product.title }}</span>
+          loaded.</span
+        >
+        </ng-container>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
+<ng-template #showLoading>
+  <app-loading></app-loading>
+</ng-template>
+<ng-template #errorData>
+  <app-load-error [message]="'Category'"></app-load-error>
+</ng-template>

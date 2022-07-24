@@ -1,0 +1,46 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <ng-container *ngIf="vm.product">
+    <div
+      class="absolute inset-0 z-10 h-screen w-screen"
+      style="background: rgba(0, 0, 0, 0.75)"
+    >
+      <div class="flex h-full justify-center items-center">
+        <div
+          class="dark:bg-gray-800 bg-white rounded-xl shadow-2xl p-6 md:w-1/2 xl:w-1/3"
+        >
+          <div>
+          <span class="tui-text_h5 dark:text-gray-300 text-gray-700"
+          >Delete
+            <span class="tui-text_h3 dark:text-gray-500 text-gray-900">{{
+              vm.product.title
+              }}</span>
+            ?</span
+          >
+          </div>
+          <div class="mt-10 flex justify-end space-x-5">
+            <button
+              tuiButton
+              size="m"
+              appearance="secondary"
+              class="w-20"
+              (click)="closeDialog()"
+              [disabled]="vm.isLoading === 'pending'"
+            >
+              No
+            </button>
+            <button
+              tuiButton
+              size="m"
+              appearance="accent"
+              class="w-20"
+              [showLoader]="vm.isLoading === 'pending'"
+              (click)="deleteProduct()"
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

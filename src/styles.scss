@@ -1,0 +1,27 @@
+/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss/base";
+@import "tailwindcss/utilities";
+
+.tui-text-error{
+  color: var(--tui-error-fill);
+}
+
+/* width */
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply rounded-2xl bg-gray-800;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply rounded-2xl bg-gray-600;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 opacity-50;
+}
