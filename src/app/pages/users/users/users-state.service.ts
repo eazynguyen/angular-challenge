@@ -1,8 +1,9 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {
   BehaviorSubject,
   catchError,
   finalize,
+  Observable,
   of,
   Subject,
   switchMap,
@@ -10,13 +11,13 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs';
-import { IUser } from '../../../interfaces/user';
-import { ILoadingStatus } from '../../../interfaces/loading-status';
-import { UsersService } from '../../../services/users.service';
-import { AlertService } from '../../../services/-alert.service';
-import { PAGE_LIMIT } from '../../../utils/constant';
-import { HttpErrorResponse } from '@angular/common/http';
-import { IPagination } from '../../../interfaces/response';
+import {IUser} from '../../../interfaces/user';
+import {ILoadingStatus} from '../../../interfaces/loading-status';
+import {UsersService} from '../../../services/users.service';
+import {AlertService} from '../../../services/-alert.service';
+import {PAGE_LIMIT} from '../../../utils/constant';
+import {HttpErrorResponse} from '@angular/common/http';
+import {IPagination} from '../../../interfaces/response';
 
 @Injectable()
 export class UsersStateService implements OnDestroy {
@@ -40,6 +41,21 @@ export class UsersStateService implements OnDestroy {
     this.subject$.complete();
     this.state$.complete();
   }
+
+  searchUser$ = (query$: Observable<string>) => query$.pipe(
+    switchMap(value => this.usersService.searchUsers({q: value}).pipe(
+      tap((result) => {
+        this.patchState({
+          users: result.users,
+          pagination: {
+            totalResult: result.total,
+            totalPage: Math.ceil(result.total / PAGE_LIMIT),
+            currentPage: 1,
+          },
+        });
+      }),
+    ))
+  ).subscribe()
 
   getUsers(page = '0') {
     of('')

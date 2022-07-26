@@ -2,25 +2,34 @@ import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/co
 import {UsersStateService} from './users-state.service';
 import {FormControl} from '@angular/forms';
 import {PAGE_LIMIT} from "../../../utils/constant";
+import {debounceTime} from "rxjs";
+import {UserListStore} from "./users-store.store";
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [UsersStateService],
+  providers: [ UserListStore],
 })
 export class UsersComponent implements OnInit, OnDestroy {
-  vm$ = this.usersStateService.vm$;
+  vm$ = this.userListStore.vm$;
   searchUser = new FormControl('');
 
-  constructor(private usersStateService: UsersStateService) {}
+  constructor(private userListStore: UserListStore
+) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.vm$.subscribe(res => {
+      console.log(res)
+    })
+
+    this.userListStore.searchUsers(this.searchUser.valueChanges);
+  }
 
   ngOnDestroy() {}
 
   goToPage(index: number): void {
-    this.usersStateService.getUsers(`${index * PAGE_LIMIT}`);
+    this.userListStore.patchState({skip: `${index * PAGE_LIMIT}`})
   }
 }

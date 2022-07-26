@@ -39,7 +39,7 @@ export class BaseService<T, R> implements IBaseService<T, R> {
 
   update(body: R, id: number): Observable<R> {
     return this.http
-      .put<R>(`${this.url}1/${this.endPoint}/${id}`, body)
+      .put<R>(`${this.url}/${this.endPoint}/${id}`, body)
       .pipe(delay(400));
   }
 

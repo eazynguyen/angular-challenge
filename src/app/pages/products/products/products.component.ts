@@ -1,8 +1,15 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild,} from '@angular/core';
-import {IProduct} from '../../../interfaces/product';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { IProduct } from '../../../interfaces/product';
 import {
   BehaviorSubject,
   catchError,
+  debounceTime,
   finalize,
   Observable,
   of,
@@ -12,15 +19,16 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs';
-import {ProductsService} from '../../../services/products.service';
-import {FormControl} from '@angular/forms';
-import {ILoadingStatus} from '../../../interfaces/loading-status';
-import {AlertDirective} from '../../../directives/alert.directive';
-import {ProductDeleteComponent} from '../product-delete/product-delete.component';
-import {IPagination} from '../../../interfaces/response';
-import {AlertService} from '../../../services/-alert.service';
-import {HttpErrorResponse} from '@angular/common/http';
-import {PAGE_LIMIT} from '../../../utils/constant';
+import { ProductsService } from '../../../services/products.service';
+import { FormControl } from '@angular/forms';
+import { ILoadingStatus } from '../../../interfaces/loading-status';
+import { AlertDirective } from '../../../directives/alert.directive';
+import { ProductDeleteComponent } from '../product-delete/product-delete.component';
+import { IPagination } from '../../../interfaces/response';
+import { AlertService } from '../../../services/-alert.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { PAGE_LIMIT } from '../../../utils/constant';
+import {UserListStore} from "../../users/users/users-store.store";
 
 @Component({
   selector: 'app-products',
@@ -43,12 +51,32 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   constructor(
     private productsService: ProductsService,
-    private alertService: AlertService
+    private alertService: AlertService,
   ) {}
 
   ngOnInit(): void {
     this.getProducts();
 
+    this.query.valueChanges
+      .pipe(
+        debounceTime(300),
+        switchMap((str) =>
+          this.productsService.searchProduct({ q: `${str}`.trim() }).pipe(
+            tap((result) => {
+              console.log(result);
+              this.patchState({
+                products: result.products,
+                pagination: {
+                  totalResult: result.total,
+                  totalPage: Math.ceil(result.total / PAGE_LIMIT),
+                  currentPage: 1,
+                },
+              });
+            })
+          )
+        )
+      )
+      .subscribe();
   }
 
   ngOnDestroy() {

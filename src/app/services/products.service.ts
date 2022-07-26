@@ -17,7 +17,7 @@ export class ProductsService extends BaseService<IProductResponse, IProduct> {
     return this.http.get<string[]>(`${this.url}/products/categories`);
   }
 
-  searchProduct(params: Params) {
-    return this.http.get(`${this.url}/products/search`, { params });
+  searchProduct(params: Params) : Observable<IProductResponse>{
+    return this.http.get<IProductResponse>(`${this.url}/products/search`, { params });
   }
 }
