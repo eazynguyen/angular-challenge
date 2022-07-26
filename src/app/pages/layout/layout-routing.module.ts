@@ -14,8 +14,14 @@ const routes: Routes = [
       },
       {
         path: 'users',
-        loadChildren: () => import('../users/users.module').then(m => m.UsersModule)
-      }
+        loadChildren: () =>
+          import('../users/users.module').then((m) => m.UsersModule),
+      },
+      {
+        path: 'carts',
+        loadChildren: () =>
+          import('../carts/carts.module').then((m) => m.CartsModule),
+      },
     ],
   },
 ];

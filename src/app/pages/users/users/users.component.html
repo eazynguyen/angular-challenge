@@ -76,6 +76,14 @@
           </tbody>
         </table>
       </div>
+      <div *ngIf="vm.pagination">
+        <tui-pagination
+          [activePadding]="2"
+          [length]="vm.pagination.totalPage"
+          [index]="+vm.pagination.currentPage"
+          (indexChange)="goToPage($event)"
+        ></tui-pagination>
+      </div>
     </ng-container>
   </ng-container>
 </div>

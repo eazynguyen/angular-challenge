@@ -1,13 +1,13 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {UsersStateService} from './users-state.service';
-import {FormControl} from "@angular/forms";
-import {UsersService} from "../../../services/users.service";
-import {debounceTime} from "rxjs";
+import {FormControl} from '@angular/forms';
+import {PAGE_LIMIT} from "../../../utils/constant";
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [UsersStateService],
 })
 export class UsersComponent implements OnInit, OnDestroy {
@@ -16,15 +16,11 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   constructor(private usersStateService: UsersStateService) {}
 
-  ngOnInit(): void {
-    this.getUsers();
-
-
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy() {}
 
-  getUsers() {
-    this.usersStateService.getUsers();
+  goToPage(index: number): void {
+    this.usersStateService.getUsers(`${index * PAGE_LIMIT}`);
   }
 }

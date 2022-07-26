@@ -39,8 +39,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
   });
   vm$: Observable<ProductState> = this.state$.asObservable();
 
-  currentPage = 0;
-
   query = new FormControl('');
 
   constructor(
@@ -78,7 +76,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   goToPage(index: number): void {
-    this.currentPage = index;
     this.getProducts(`${index * PAGE_LIMIT}`);
   }
 
@@ -95,7 +92,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
                 pagination: {
                   totalResult: result.total,
                   totalPage: Math.ceil(result.total / PAGE_LIMIT),
-                  currentPage: +this.currentPage,
+                  currentPage: Math.floor(+page / PAGE_LIMIT),
                 },
               })
             ),
