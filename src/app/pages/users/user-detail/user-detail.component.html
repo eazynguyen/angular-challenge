@@ -3,11 +3,17 @@
     <ng-container *ngIf="!(vm.isLoading === 'pending'); else showLoading">
       <div class="text-center mt-10">
         <ng-container *ngIf="vm.user; else errorData">
-        <span class="tui-text_h5 text-gray-300"
-        >Product
-          <span class="tui-text_h3 text-gray-500">{{ vm.user.firstName + ' ' + vm.user.maidenName + ' ' + vm.user.lastName }}</span>
-          loaded.</span
-        >
+          <span class="tui-text_h5 text-gray-500 dark:text-gray-300"
+            >User
+            <span class="tui-text_h3 text-blue-600 dark:text-gray-500">{{
+              vm.user.firstName +
+                " " +
+                vm.user.maidenName +
+                " " +
+                vm.user.lastName
+            }}</span>
+            loaded.</span
+          >
         </ng-container>
       </div>
     </ng-container>

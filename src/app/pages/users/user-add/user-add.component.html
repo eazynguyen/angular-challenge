@@ -1,1 +1,38 @@
-<p>user-add works!</p>
+<div class="dark:bg-gray-800 rounded-xl p-6 h-full flex flex-col space-y-10">
+  <form [formGroup]="formUser" (ngSubmit)="onSubmit()">
+    <div class="grid xl:grid-cols-2 md:gap-4 xl:gap-6">
+      <div class="grid xl:grid-cols-2 gap-4">
+        <div>
+          <tui-input
+            tuiTextfieldSize="m"
+            tuiTextfieldExampleText="Enter first name..."
+            formControlName="firstName"
+          >
+            First Name <span class="tui-required"></span>
+          </tui-input>
+          <tui-field-error formControlName="firstName"></tui-field-error>
+        </div>
+        <div>
+          <tui-input
+            tuiTextfieldSize="m"
+            tuiTextfieldExampleText="Enter last name..."
+            formControlName="lastName"
+          >
+            Last Name <span class="tui-required"></span>
+          </tui-input>
+          <tui-field-error formControlName="lastName"></tui-field-error>
+        </div>
+      </div>
+      <div>
+        <tui-input
+          tuiTextfieldSize="m"
+          tuiTextfieldExampleText="Enter last name..."
+          formControlName="maidenName"
+        >
+          Maiden Name <span class="tui-required"></span>
+        </tui-input>
+        <tui-field-error formControlName="maidenName"></tui-field-error>
+      </div>
+    </div>
+  </form>
+</div>

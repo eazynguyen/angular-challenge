@@ -3,7 +3,7 @@ import {ILoadingStatus} from '../../../interfaces/loading-status';
 import {Injectable} from '@angular/core';
 import {ComponentStore, tapResponse} from '@ngrx/component-store';
 import {IPagination} from '../../../interfaces/response';
-import {Observable, switchMap, tap} from 'rxjs';
+import {combineLatest, finalize, switchMap, tap,} from 'rxjs';
 import {UsersService} from '../../../services/users.service';
 import {PAGE_LIMIT} from '../../../utils/constant';
 import {AlertService} from '../../../services/-alert.service';
@@ -33,59 +33,62 @@ export class UserListStore extends ComponentStore<UsersListState> {
   ) {
     super(init);
 
-    this.getUsers(this.select((s) => s.skip));
-    // this.searchUsers(this.select((s) => s.query));
+    this.getUsers(
+      combineLatest([this.select((s) => s.skip), this.select((s) => s.query)])
+    );
   }
 
-  vm$ = this.state$;
+  readonly setQuery = this.updater((state, query: string) => ({
+    ...state,
+    query: query,
+  }));
 
-  readonly getUsers = this.effect((actions$: Observable<string>) =>
-    actions$.pipe(
-      switchMap((page) =>
-        this.usersService.getPagination(page, PAGE_LIMIT).pipe(
-          tapResponse(
-            (result) => {
-              this.patchState({
-                users: result.users,
-                pagination: {
-                  totalResult: result.total,
-                  totalPage: Math.ceil(result.total / PAGE_LIMIT),
-                  currentPage: Math.floor(+page / PAGE_LIMIT),
+  readonly getUsers = this.effect<[string, string]>((action$) =>
+    action$.pipe(
+      tap(() => this.patchState({isLoading: ILoadingStatus.Pending})),
+      switchMap(([skip, query]) => {
+        if (!query) {
+          return this.usersService.getPagination(skip, PAGE_LIMIT).pipe(
+            finalize(() => this.patchState({isLoading: ILoadingStatus.Done})),
+            tapResponse(
+              (result) => {
+                this.patchState({
+                  users: result.users,
+                  pagination: {
+                    totalResult: result.total,
+                    totalPage: Math.ceil(result.total / PAGE_LIMIT),
+                    currentPage: Math.floor(+skip / PAGE_LIMIT),
+                  },
+                });
+              },
+              (error: HttpErrorResponse) => {
+                this.alertService.error(error.message).subscribe();
+              }
+            )
+          );
+        } else {
+          return this.usersService
+            .searchUsers({ q: query, skip: skip, limit: PAGE_LIMIT })
+            .pipe(
+              finalize(() => this.patchState({isLoading: ILoadingStatus.Done})),
+              tapResponse(
+                (result) => {
+                  this.patchState({
+                    users: result.users,
+                    pagination: {
+                      totalResult: result.total,
+                      totalPage: Math.ceil(result.total / PAGE_LIMIT),
+                      currentPage: Math.floor(+skip / PAGE_LIMIT),
+                    },
+                  });
                 },
-              });
-            },
-            (error: HttpErrorResponse) => {
-              this.alertService.error(error.message).subscribe();
-            }
-          )
-        )
-      )
-    )
-  );
-
-  readonly searchUsers = this.effect((query$: Observable<string>) =>
-    query$.pipe(
-      tap(() => this.patchState({ isLoading: ILoadingStatus.Pending})),
-      switchMap((value) =>
-        this.usersService.searchUsers({ q: value }).pipe(
-          tapResponse(
-            (result) => {
-              this.patchState({
-                users: result.users,
-                isLoading: ILoadingStatus.Done,
-                pagination: {
-                  totalResult: result.total,
-                  totalPage: Math.ceil(result.total / PAGE_LIMIT),
-                  currentPage: 1,
-                },
-              });
-            },
-            (error: HttpErrorResponse) => {
-              this.alertService.error(error.message).subscribe();
-            }
-          )
-        )
-      )
+                (error: HttpErrorResponse) => {
+                  this.alertService.error(error.message).subscribe();
+                }
+              )
+            );
+        }
+      })
     )
   );
 }

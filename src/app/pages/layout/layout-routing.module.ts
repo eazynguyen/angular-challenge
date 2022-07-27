@@ -8,6 +8,11 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
         path: 'products',
         loadChildren: () =>
           import('../products/products.module').then((m) => m.ProductsModule),
@@ -22,6 +27,10 @@ const routes: Routes = [
         loadChildren: () =>
           import('../carts/carts.module').then((m) => m.CartsModule),
       },
+      {
+        path: 'dashboard',
+        loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardModule)
+      }
     ],
   },
 ];

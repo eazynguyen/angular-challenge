@@ -13,7 +13,7 @@ import {
     TuiLinkModule,
     TuiTextfieldControllerModule
 } from "@taiga-ui/core";
-import {TuiInputModule, TuiPaginationModule} from "@taiga-ui/kit";
+import {TuiFieldErrorModule, TuiInputModule, TuiPaginationModule} from "@taiga-ui/kit";
 import {TuiAutoFocusModule} from "@taiga-ui/cdk";
 import {ReactiveFormsModule} from "@angular/forms";
 
@@ -24,19 +24,20 @@ import {ReactiveFormsModule} from "@angular/forms";
     UserDetailComponent,
     UserAddComponent
   ],
-    imports: [
-        CommonModule,
-        UsersRoutingModule,
-        SharedModule,
-        TuiLinkModule,
-        TuiFormatPhonePipeModule,
-        TuiInputModule,
-        TuiTextfieldControllerModule,
-        TuiAutoFocusModule,
-        TuiButtonModule,
-        ReactiveFormsModule,
-        TuiFormatNumberPipeModule,
-        TuiPaginationModule
-    ],
+  imports: [
+    CommonModule,
+    UsersRoutingModule,
+    SharedModule,
+    TuiLinkModule,
+    TuiFormatPhonePipeModule,
+    TuiInputModule,
+    TuiTextfieldControllerModule,
+    TuiAutoFocusModule,
+    TuiButtonModule,
+    ReactiveFormsModule,
+    TuiFormatNumberPipeModule,
+    TuiPaginationModule,
+    TuiFieldErrorModule
+  ],
 })
 export class UsersModule { }
