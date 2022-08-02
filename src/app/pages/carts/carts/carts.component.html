@@ -1,61 +1,80 @@
 <div
   class="dark:bg-gray-800 rounded-xl p-6 h-full flex flex-col space-y-10 overflow-auto"
 >
- <ng-container *ngIf="!isLoading; else showLoading">
-   <div class="h-full">
-     <table class="tui-table">
-       <tbody>
-       <tr class="tui-table__tr_border_top">
-         <th class="tui-table__th tui-table__th_font-size_l">UserID</th>
-         <th class="tui-table__th tui-table__th_font-size_l">Total</th>
-         <th class="tui-table__th tui-table__th_font-size_l">Discounted Total</th>
-         <th class="tui-table__th tui-table__th_font-size_l">Total Products</th>
-         <th class="tui-table__th tui-table__th_font-size_l">Total Quantity</th>
-         <th class="tui-table__th tui-table__th_font-size_l w-52">
-           Actions
-         </th>
-       </tr>
-       <tr  class="tui-table__tr tui-table__tr_border_top" *ngFor="let cart of carts">
-         <td class="tui-table__td">
-           {{ cart.userId }}
-         </td>
-         <td class="tui-table__td">
-           {{ cart.total }}
-         </td>
-         <td class="tui-table__td">
-           {{ cart.discountedTotal }}
-         </td>
-         <td class="tui-table__td">
-           {{ cart.totalProducts }}
-         </td>
-         <td class="tui-table__td">
-           {{ cart.totalQuantity }}
-         </td>
-         <td class="tui-table__td">
-           <a tuiLink [routerLink]="['/carts/detail', cart.id]">Detail</a>
-           |
-           <a
-             tuiLink
-             mode="positive"
-             [routerLink]="['/carts/update', cart.id]"
-           >Update</a
-           >
-           |
-           <a tuiLink mode="negative">Delete </a>
-         </td>
-       </tr>
-       </tbody>
-     </table>
-   </div>
-   <div *ngIf="pagination">
-     <tui-pagination
-       [activePadding]="2"
-       [length]="pagination.totalPage"
-       [index]="pagination.currentPage"
-       (indexChange)="goToPage($event)"
-     ></tui-pagination>
-   </div>
- </ng-container>
+  <div class="flex space-x-4">
+    <tui-input
+      tuiTextfieldSize="m"
+      [tuiTextfieldExampleText]="'Searching cart...'"
+      class="w-full"
+    >
+      Search Carts
+    </tui-input>
+    <button tuiButton size="m" icon="tuiIconPlus">Add new</button>
+  </div>
+  <ng-container *ngIf="!isLoading; else showLoading">
+    <div class="h-full">
+      <table class="tui-table">
+        <tbody>
+          <tr class="tui-table__tr_border_top">
+            <th class="tui-table__th tui-table__th_font-size_l">UserID</th>
+            <th class="tui-table__th tui-table__th_font-size_l">Total</th>
+            <th class="tui-table__th tui-table__th_font-size_l">
+              Discounted Total
+            </th>
+            <th class="tui-table__th tui-table__th_font-size_l">
+              Total Products
+            </th>
+            <th class="tui-table__th tui-table__th_font-size_l">
+              Total Quantity
+            </th>
+            <th class="tui-table__th tui-table__th_font-size_l w-52">
+              Actions
+            </th>
+          </tr>
+          <tr
+            class="tui-table__tr tui-table__tr_border_top"
+            *ngFor="let cart of carts"
+          >
+            <td class="tui-table__td">
+              {{ cart.userId }}
+            </td>
+            <td class="tui-table__td">
+              {{ cart.total }}
+            </td>
+            <td class="tui-table__td">
+              {{ cart.discountedTotal }}
+            </td>
+            <td class="tui-table__td">
+              {{ cart.totalProducts }}
+            </td>
+            <td class="tui-table__td">
+              {{ cart.totalQuantity }}
+            </td>
+            <td class="tui-table__td">
+              <a tuiLink [routerLink]="['/carts/detail', cart.id]">Detail</a>
+              |
+              <a
+                tuiLink
+                mode="positive"
+                [routerLink]="['/carts/update', cart.id]"
+                >Update</a
+              >
+              |
+              <a tuiLink mode="negative">Delete </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="pagination">
+      <tui-pagination
+        [activePadding]="2"
+        [length]="pagination.totalPage"
+        [index]="pagination.currentPage"
+        (indexChange)="goToPage($event)"
+      ></tui-pagination>
+    </div>
+  </ng-container>
 </div>
 <ng-template #showLoading>
   <app-loading></app-loading>

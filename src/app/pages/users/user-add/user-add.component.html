@@ -1,7 +1,7 @@
 <div class="dark:bg-gray-800 rounded-xl p-6 h-full flex flex-col space-y-10">
-  <form [formGroup]="formUser" (ngSubmit)="onSubmit()">
-    <div class="grid xl:grid-cols-2 md:gap-4 xl:gap-6">
-      <div class="grid xl:grid-cols-2 gap-4">
+  <ng-container *ngIf="vm$ | async as vm">
+    <form [formGroup]="formUser" (ngSubmit)="onSubmit()">
+      <div class="grid xl:grid-cols-2 gap-6">
         <div>
           <tui-input
             tuiTextfieldSize="m"
@@ -10,7 +10,10 @@
           >
             First Name <span class="tui-required"></span>
           </tui-input>
-          <tui-field-error formControlName="firstName"></tui-field-error>
+          <tui-field-error
+            formControlName="firstName"
+            class="absolute"
+          ></tui-field-error>
         </div>
         <div>
           <tui-input
@@ -20,19 +23,102 @@
           >
             Last Name <span class="tui-required"></span>
           </tui-input>
-          <tui-field-error formControlName="lastName"></tui-field-error>
+          <tui-field-error
+            formControlName="lastName"
+            class="absolute"
+          ></tui-field-error>
+        </div>
+        <div>
+          <tui-input
+            tuiTextfieldSize="m"
+            tuiTextfieldExampleText="Enter maiden name..."
+            formControlName="maidenName"
+          >
+            Maiden Name <span class="tui-required"></span>
+          </tui-input>
+          <tui-field-error formControlName="maidenName"></tui-field-error>
+        </div>
+        <div>
+          <tui-input-number
+            tuiTextfieldSize="m"
+            tuiTextfieldExampleText="Enter age..."
+            formControlName="age"
+          >
+            Age <span class="tui-required"></span>
+          </tui-input-number>
+          <tui-field-error
+            formControlName="age"
+            class="absolute"
+          ></tui-field-error>
+        </div>
+        <div>
+          <tui-select
+            tuiTextfieldSize="m"
+            tuiTextfieldExampleText="Select gender..."
+            formControlName="gender"
+            [valueContent]="genderContent"
+          >
+            Gender <span class="tui-required"></span>
+            <tui-data-list-wrapper
+              *tuiDataList
+              [items]="vm.genders"
+              [itemContent]="genderContent"
+            ></tui-data-list-wrapper>
+          </tui-select>
+          <tui-field-error
+            formControlName="gender"
+            class="absolute"
+          ></tui-field-error>
+        </div>
+        <div>
+          <tui-input
+            tuiTextfieldSize="m"
+            tuiTextfieldExampleText="Enter email..."
+            formControlName="email"
+            >Email <span class="tui-required"></span>
+          </tui-input>
+          <tui-field-error
+            formControlName="email"
+            class="absolute"
+          ></tui-field-error>
+        </div>
+        <div>
+          <tui-input-phone-international
+            tuiTextfieldSize="m"
+            tuiTextfieldExampleText="Enter phone..."
+            formControlName="phone"
+            [countries]="vm.countries"
+            [(countryIsoCode)]="vm.countryIsoCode"
+          >
+            Phone <span class="tui-required"></span>
+          </tui-input-phone-international>
+          <tui-field-error
+            formControlName="phone"
+            class="absolute"
+          ></tui-field-error>
+        </div>
+        <div>
+          <tui-input-date
+            tuiTextfieldSize="m"
+            tuiTextfieldExampleText="Select birthDate..."
+            formControlName="birthDate"
+          >
+            Birth Date <span class="tui-required"></span>
+          </tui-input-date>
+          <tui-field-error
+            formControlName="birthDate"
+            class="absolute"
+          ></tui-field-error>
         </div>
       </div>
-      <div>
-        <tui-input
-          tuiTextfieldSize="m"
-          tuiTextfieldExampleText="Enter last name..."
-          formControlName="maidenName"
-        >
-          Maiden Name <span class="tui-required"></span>
-        </tui-input>
-        <tui-field-error formControlName="maidenName"></tui-field-error>
+      <div class="mt-10 text-right">
+        <button tuiButton size="m" [showLoader]="vm.isLoading === 'pending'">
+          Create User
+        </button>
       </div>
-    </div>
-  </form>
+    </form>
+  </ng-container>
 </div>
+<ng-template #genderContent let-gender>
+  {{ gender | titlecase }}
+</ng-template>

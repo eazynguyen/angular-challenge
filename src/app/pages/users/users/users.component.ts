@@ -1,13 +1,12 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { PAGE_LIMIT, PAGE_SIZE } from '../../../utils/constant';
-import { UserListStore } from './users-store.store';
-import { debounceTime } from 'rxjs';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild,} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {PAGE_LIMIT} from '../../../utils/constant';
+import {UserListStore} from './users-store.store';
+import {debounceTime} from 'rxjs';
+import {AlertDirective} from "../../../directives/alert.directive";
+import {IUser} from "../../../interfaces/user";
+import {UserDeleteComponent} from "../user-delete/user-delete.component";
+import {initializeApp} from '@firebase/app';
 
 @Component({
   selector: 'app-users',
@@ -17,6 +16,7 @@ import { debounceTime } from 'rxjs';
   providers: [UserListStore],
 })
 export class UsersComponent implements OnInit, OnDestroy {
+  @ViewChild(AlertDirective) showAlert!: AlertDirective;
   vm$ = this.userListStore.state$;
   searchUser = new FormControl('');
   pageSize = PAGE_LIMIT;
@@ -33,5 +33,14 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   goToPage(index: number): void {
     this.userListStore.patchState({ skip: `${index * PAGE_LIMIT}` });
+  }
+
+  deleteUser(user: IUser){
+    const viewContainerRef = this.showAlert.viewContainerRef;
+    viewContainerRef.clear();
+
+    const componentRef = viewContainerRef.createComponent<UserDeleteComponent>(UserDeleteComponent);
+
+    componentRef.instance
   }
 }

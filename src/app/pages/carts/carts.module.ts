@@ -6,8 +6,8 @@ import { CartsComponent } from './carts/carts.component';
 import { CartDetailComponent } from './cart-detail/cart-detail.component';
 import { CartAddComponent } from './cart-add/cart-add.component';
 import {SharedModule} from "../../modules/shared/shared.module";
-import {TuiLinkModule} from "@taiga-ui/core";
-import {TuiPaginationModule} from "@taiga-ui/kit";
+import {TuiButtonModule, TuiLinkModule, TuiTextfieldControllerModule} from "@taiga-ui/core";
+import {TuiInputModule, TuiPaginationModule} from "@taiga-ui/kit";
 
 
 @NgModule({
@@ -21,7 +21,10 @@ import {TuiPaginationModule} from "@taiga-ui/kit";
     CartsRoutingModule,
     SharedModule,
     TuiLinkModule,
-    TuiPaginationModule
+    TuiPaginationModule,
+    TuiInputModule,
+    TuiTextfieldControllerModule,
+    TuiButtonModule
   ]
 })
 export class CartsModule { }
